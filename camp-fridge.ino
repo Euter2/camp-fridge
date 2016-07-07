@@ -3,8 +3,8 @@
 //#include <DallasTemperature.h>
 
 //temperature related variables
-const float hysteresis = 3.0; //<-- setup required!!!
-const float targetTemp = 5.0; //<-- setup required!!!
+const float hysteresis = 6.0; //max hysteresis provided by drug manufacturer
+const float targetTemp = 5.0; //ideal temperature provided by drug manufacturer
 const long updatePeriod = 1*1000; //<-- setup required!!!
 const int tempPin = 4;
 const int heatPin = 13;
@@ -37,17 +37,17 @@ void measureTemp() {
   //read value from temp sensor with calibration offset
   //sensor.requestTemperaturesByIndex(0);
   //temp = sensor.getTempCByIndex(0) + offset;
-  value = analogRead(sensorPin);
-  temp = map(value,0,1023,-10,10);
+  value = analogRead(sensorPin); //TEST
+  temp = map(value,0,1023,-1000,1000)/100.0; //TEST
   }
 
 void checkTemp() {
-  if (temp<targetTemp-(hysteresis/2)) {
+  if (temp<targetTemp-(hysteresis/2.0)) {
     digitalWrite(heatPin, HIGH);
     digitalWrite(hornPin, LOW);
     Serial.print("LOW Temperature: ");
     Serial.println(temp);
-    } else if (temp>targetTemp+(hysteresis/2)) {
+    } else if (temp>targetTemp+(hysteresis/2.0)) {
       digitalWrite(hornPin, HIGH);
       digitalWrite(heatPin, LOW);
       Serial.print("HIGH Temperature: ");
